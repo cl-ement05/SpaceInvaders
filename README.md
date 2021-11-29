@@ -34,3 +34,8 @@ Le schéma qui va suivre représente chaque fichier du projet et les dépendance
     |- joueur.py -> représente le personnage, ses vies... ; 1 seule instance devrait être créée par party.py et conservée tout au long d'une même partie 
     |- pioupiou.py
 ```
+
+# répartition
+-Paul : Les pioupiou et le joueur
+-Clément : les méchants 
+-Tiphaine : le score et la map 
