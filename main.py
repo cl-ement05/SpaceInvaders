@@ -1,7 +1,8 @@
-from party import Party
+import party
 print('Démarrage...')
+party.checkPygameInstallation()
 
-party = Party()
+partyRunning = party.Party()
 
 continuer = True
 while continuer :
