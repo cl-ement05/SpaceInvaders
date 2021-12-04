@@ -6,8 +6,8 @@ partyRunning = party.Party()
 
 continuer = True
 while continuer :
-    status = partyRunning.playRound()
-    if status != None :
+    if partyRunning.playRound() != None :
         party.terminate()
         continuer = False
+print("Merci et à bientôt :) !")
         
