@@ -1,8 +1,8 @@
 class Pioupiou:
     #définition des attributs : le paramètre position sera la position du joueur en couple de coordonnées
     def __init__(self, position):
-        _damage = 20
-        _position = position
+        self._damage = 20
+        self._position = position
 
     #définition des méthodes des pioupiou
     def deplacement(self):
