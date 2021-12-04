@@ -7,9 +7,10 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
 # Principes de jeu
 - 1 round de party.py = 1 round du jeu
 - Pas d'infini : Big Boss à la fin donc victoire possible
-- 35 ennemis : 5 lignes par 7 colones
-- On définit la carte de jeu comme un carré de 7 cases par 7, chacune de 100 pixels de côté
-- Les ennemis occupent un rectangle de 5 cases de haut par 7 de large soit 35 ennemis ; il reste alors 2 lignes de cases dont 1 pour le joueur
+- Fenetre de 700 pixels par 700
+- On définit la carte de jeu comme un carré de 6 cases par 6, chacune de 100 pixels de côté et une marge de 50 pixel pour chaque côté du carré
+- Les ennemis occupent un rectangle de 4 cases de haut par 6 de large soit 24 ennemis ; il reste alors 2 lignes de cases dont 1 pour le joueur
+- Les ennemis commençent "à gauche" de la map. Un ennemi a pour coordonnées min (25, y) et max (675, y)
 - Au début :
   * Ennemi :
     + 40 points de vie

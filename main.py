@@ -6,7 +6,7 @@ partyRunning = party.Party()
 
 continuer = True
 while continuer :
-    status = party.playRound()
+    status = partyRunning.playRound()
     if status != None :
         party.terminate()
         continuer = False
