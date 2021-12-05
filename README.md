@@ -9,15 +9,16 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
 - Pas d'infini : Big Boss à la fin donc victoire possible
 - Fenetre de 700 pixels par 700
 - On définit la carte de jeu comme un carré de 6 cases par 6, chacune de 100 pixels de côté et une marge de 50 pixel pour chaque côté du carré
-- Les ennemis occupent un rectangle de 4 cases de haut par 6 de large soit 24 ennemis ; il reste alors 2 lignes de cases dont 1 pour le joueur
-- Les ennemis commençent "à gauche" de la map. Un ennemi a pour coordonnées min (25, y) et max (675, y)
+- Les ennemis occupent un rectangle de 4 cases de haut par 6 de long soit 24 ennemis ; il reste alors 2 lignes de cases dont 1 pour le joueur
+- Les ennemis commençent "à gauche" de la map. Le centre d'un ennemi a donc pour coordonnées min (100, 100) (son coin gauche est à (50, 50)) et max (600, 400)
+- Le centre du joueur lui se balade sur une droite d'équation y = 600
 - Au début :
   * Ennemi :
     + 40 points de vie
     + 1 missile/12sec
   * Joueur et ses pioupious :
     + Lorsque atteint par un missile ennemi : -1 vie
-    + 1 missile : 20 dégâts à un ennemi 
+    + 1 missile : 40 dégâts à un ennemi 
     + 3 vies
 - A chaque nouvveau round :
   * Augmentation des points de vie d'un ennemi : + 5
