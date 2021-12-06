@@ -15,7 +15,7 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
 - Au début :
   * Ennemi :
     + 40 points de vie
-    + 1 missile/12sec
+    + 1 missile/5sec
   * Joueur et ses pioupious :
     + Lorsque atteint par un missile ennemi : -1 vie
     + 1 missile : 40 dégâts à un ennemi 

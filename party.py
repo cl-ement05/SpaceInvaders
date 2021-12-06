@@ -1,3 +1,4 @@
+from random import choice
 from joueur import Joueur
 from ennemi import Ennemi
 from pioupiou import PioupiouEnnemi, PioupiouJoueur
@@ -25,6 +26,8 @@ def checkPygameInstallation() :
 import pygame
 pygame.init()
 
+ENNEMIPIUPIOU = pygame.USEREVENT + 1
+
 class Party :
     screen = pygame.display.set_mode([700, 700])
     
@@ -41,6 +44,7 @@ class Party :
             for x in range(6) :
                 self._listEnnemis.add(Ennemi(40 + self.level * 5, (100 + 100 * x, 100 + y * 100)))
         self.update()
+        pygame.time.set_timer(ENNEMIPIUPIOU, 5000)
 
         ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
         running = True
@@ -48,6 +52,9 @@ class Party :
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:             #-> l'utilisateur a demandé à fermer la fenêtre
                     running = False
+
+                if event.type == pygame.ENNEMIPIOUPIOU :
+                    choice(self._listEnnemis.sprites()).emitPioupiou()
 
             pressed_keys = pygame.key.get_pressed()
             self._joueur.update(pressed_keys)

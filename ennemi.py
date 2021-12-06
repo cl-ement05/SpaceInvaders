@@ -2,7 +2,7 @@ from random import randint
 import pygame
 from pygame.locals import RLEACCEL
 
-from pioupiou import Pioupiou
+from pioupiou import PioupiouEnnemi
 class Ennemi(pygame.sprite.Sprite) :
     def __init__(self, vie, position: tuple) -> None:
         super(Ennemi, self).__init__()
@@ -16,8 +16,9 @@ class Ennemi(pygame.sprite.Sprite) :
     
     def update(self, moveDirection) :
         self.rect.move_ip(-5 if moveDirection == "left" else 5, 0)
-        if (self.timeTicks - pygame.time.get_ticks()) % self._vitesseFrappe == 0 :             #-> lancer un missile tt les 12sec
-            self.pioupiou = Pioupiou((self.rect.x, self.rect.y), "ennemi")
+
+    def emitPioupiou(self) :
+        self.pioupiou = PioupiouEnnemi((self.rect.x, self.rect.y), )
             
 
         
