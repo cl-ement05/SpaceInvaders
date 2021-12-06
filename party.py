@@ -40,7 +40,8 @@ class Party :
         for y in range(4) :
             for x in range(6) :
                 self._listEnnemis.add(Ennemi(40 + self.level * 5, (100 + 100 * x, 100 + y * 100)))
-        
+        self.update()
+
         ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
         running = True
         while running :
@@ -64,15 +65,17 @@ class Party :
                 del ennemiCollidePioupiou
 
             Party.screen.fill((0, 0, 0))
-            #actualisation de l'affichage graphique
-            for sprite in self._allSprites :
-                Party.screen.blit(sprite.surf, sprite.rect)
-            
-            pygame.display.flip()
+            self.update()
         
         self._listEnnemis.empty()
         return None if self._joueur.isAlive() else False
         
+    def update(self) :
+        #actualisation de l'affichage graphique
+        for sprite in self._allSprites :
+                Party.screen.blit(sprite.surf, sprite.rect)
+        pygame.display.flip()
+
 
     def terminate(self) :
         pygame.quit()
