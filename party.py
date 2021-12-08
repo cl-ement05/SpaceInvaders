@@ -27,6 +27,22 @@ import pygame
 pygame.init()
 clock = pygame.time.Clock()
 clock.tick(30)
+font = pygame.font.SysFont("Comic Sans MC", 70)
+
+class Label: #créer le texte cliquable
+    def __init__(self, text, x, y): #initialisation du texte à cliquer par son contenu et position (x,y)
+        self.x = x
+        self.y = y
+        self.set(text)
+ 
+    def set(self, text):
+        self.text = font.render(text, True, (229,229,229)) #texte + lissage + couleur
+        w, h = self.text.get_size() #affectation hauteur + largeur du texte
+        self.rect = pygame.Rect(self.x, self.y, w, h) #avoir la zone où on pourra cliquer sur le texe
+        self.surface = pygame.Surface(screen.get_size())
+        self.surface.blit(self.text, (self.x, self.y)) #affichage
+
+lexit = Label("Exit", 285, 380)
 
 class Party :    
     def __init__(self) -> None:
@@ -50,6 +66,28 @@ class Party :
         pygame.time.set_timer(self.ENNEMIPIOUPIOU, 5000)
 
         ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
+        
+    def CliqueSourisExit(lexit): #actions de la souris
+        if pygame.mouse.get_pressed()[0]:
+            mx, my = pygame.mouse.get_pos() #position de la souris
+            if lexit.rect.collidepoint(mx, my): #collision entre texte et souris
+                pygame.quit()
+
+    def Victory(): #écran victoire
+        myfont = pygame.font.SysFont('Comic Sans MS', 100)
+        textsurface = myfont.render('YOU WON!', True, (231, 193, 0))
+        screen.blit(textsurface,(73,200))
+        textscore = font.render('Score:', True, (255, 255, 255))
+        screen.blit(textscore, (100, 600))
+        screen.blit(self._score, (200, 600))
+
+    def GameOver(): #écran défaite
+        myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
+        textsurface = myfont.render('GAME OVER', True, (255, 0, 0)) #texte + lissage + couleur
+        screen.blit(textsurface,(50,200)) #affichage texte + position
+        textscore = font.render('Score:', True, (255, 255, 255))
+        screen.blit(textscore, (100, 600))
+
         running = True
         while running :
             for event in pygame.event.get():
@@ -85,6 +123,11 @@ class Party :
         
         self._listEnnemis.empty()
         return True if self._joueur.isAlive() else False
+
+        if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique
+            CliqueSourisExit(lexit)
+        screen.blit(lexit.surface, (0, 0))
+    Victory() #A paramétrer entre Victory & GameOver
         
     def update(self) :
         #actualisation de l'affichage graphique
