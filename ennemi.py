@@ -18,7 +18,7 @@ class Ennemi(pygame.sprite.Sprite) :
         self.rect.move_ip(-5 if moveDirection == "left" else 5, 0)
 
     def emitPioupiou(self) :
-        self.pioupiou = PioupiouEnnemi((self.rect.x, self.rect.y), )
+        self.pioupiou = PioupiouEnnemi((self.rect.x, self.rect.y))
             
-
+    def 
         
