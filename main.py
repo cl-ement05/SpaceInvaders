@@ -3,6 +3,7 @@ print('Démarrage...')
 party.checkPygameInstallation()
 
 partyRunning = party.Party()
+pygame.display.set_caption("Space Invadors") #changer nom fenêtre
 
 continuer = True
 while continuer :

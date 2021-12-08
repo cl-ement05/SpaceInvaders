@@ -38,6 +38,7 @@ class Party :
         self._listJoueurPioupiou = pygame.sprite.Group()
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
         self.screen = pygame.display.set_mode([700, 700])
+        self._score = 0
         
     def playRound(self) :
         #init et création des ennemis
@@ -74,6 +75,7 @@ class Party :
                     paire[0].kill()
                     paire[1].kill()
                     del paire[0], paire[1]
+                    self._score += 20
                 if len(self._listEnnemis.sprites()) == 0 :
                     self.level += 1
                     running = False
