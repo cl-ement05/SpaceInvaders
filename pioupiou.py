@@ -8,13 +8,14 @@ class Pioupiou(pygame.sprite.Sprite):
     def __init__(self, position):
         super(Pioupiou, self).__init__()      #permet d'initialiser la classe parente. Equivalent à super().__init__(self)
         self._position = position
-        self.surf = pygame.image.load("IMAGE-PIOUPIOU.jpg").convert()
+        
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect()
     
 class PioupiouEnnemi(Pioupiou) :
     def __init__(self, position):
         super().__init__(position)
+        self.surf = pygame.image.load("IMAGE-mechantPIOUPIOU.jpg").convert()
 
     def update(self) :
         self.rect.move_ip(0, -10)
@@ -22,6 +23,7 @@ class PioupiouEnnemi(Pioupiou) :
 class PioupiouJoueur(Pioupiou) :
     def __init__(self, position):
         super().__init__(position)
+        self.surf = pygame.image.load("IMAGE-PIOUPIOU.jpg").convert()
 
     def update(self) :
         self.rect.move_ip(0, 10)
