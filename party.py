@@ -42,7 +42,8 @@ class Label: #créer le texte cliquable
         self.surface = pygame.Surface(screen.get_size())
         self.surface.blit(self.text, (self.x, self.y)) #affichage
 
-lexit = Label("Exit", 285, 380)
+lexit = Label("Exit", 285, 380) #création bouton exit
+lplay = Label("Play", 280, 450) #création bouton play
 
 class Party :    
     def __init__(self) -> None:
@@ -88,6 +89,14 @@ class Party :
         textscore = font.render('Score:', True, (255, 255, 255))
         screen.blit(textscore, (100, 600))
 
+    def Welcome(): #Ecran de démarrage
+        myfont = pygame.font.SysFont('Comic Sans MS', 40)
+        myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
+        textsurface = myfont.render('Welcome to', True, (255, 255, 255)) 
+        textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
+        screen.blit(textsurface,(220,260)) 
+        screen.blit(textgame, (10,300)) #texte à afficher + position
+
         running = True
         while running :
             for event in pygame.event.get():
@@ -125,8 +134,12 @@ class Party :
         return True if self._joueur.isAlive() else False
 
         if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique
+            CliqueSourisExit(lplay)
+        screen.blit(lplay.surface, (0, 0))
+        if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique au endscreen
             CliqueSourisExit(lexit)
         screen.blit(lexit.surface, (0, 0))
+    Welcome() #A paramétrer aussi
     Victory() #A paramétrer entre Victory & GameOver
         
     def update(self) :
