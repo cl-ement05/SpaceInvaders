@@ -17,7 +17,7 @@ class PioupiouEnnemi(Pioupiou) :
         super().__init__(position)
         self.surf = pygame.image.load("IMAGE-mechantPIOUPIOU.jpg").convert()
 
-    def update(self) :
+    def update(self) : #descends de haut en bas quoi jusqu'à BOUM
         self.rect.move_ip(0, -10)
 
 class PioupiouJoueur(Pioupiou) :
@@ -25,5 +25,5 @@ class PioupiouJoueur(Pioupiou) :
         super().__init__(position)
         self.surf = pygame.image.load("IMAGE-PIOUPIOU.jpg").convert()
 
-    def update(self) :
-        self.rect.move_ip(0, 10)
+    def update(self) : #monte de bas en haut quoi jusqu'à BOUM
+        self.rect.move_ip(0, 10) 

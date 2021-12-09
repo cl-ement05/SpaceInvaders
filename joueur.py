@@ -18,7 +18,7 @@ class Joueur(pygame.sprite.Sprite) :
     def isAlive(self) :
         return self._vie > 0
 
-    def update(self, pressed_keys):
+    def update(self, pressed_keys):#les touches quand ça joue
         if pressed_keys[K_UP]:
             self.rect.move_ip(0, -5)
         if pressed_keys[K_DOWN]:
