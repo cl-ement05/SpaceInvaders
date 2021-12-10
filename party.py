@@ -27,26 +27,15 @@ import pygame
 pygame.init()
 clock = pygame.time.Clock()
 clock.tick(30)
-font = pygame.font.SysFont("Comic Sans MC", 70)
-
-class Label: #créer le texte cliquable
-    def __init__(self, text, x, y): #initialisation du texte à cliquer par son contenu et position (x,y)
-        self.x = x
-        self.y = y
-        self.set(text)
- 
-    def set(self, text):
-        self.text = font.render(text, True, (229,229,229)) #texte + lissage + couleur
-        w, h = self.text.get_size() #affectation hauteur + largeur du texte
-        self.rect = pygame.Rect(self.x, self.y, w, h) #avoir la zone où on pourra cliquer sur le texe
-        self.surface = pygame.Surface(screen.get_size())
-        self.surface.blit(self.text, (self.x, self.y)) #affichage
-
-lexit = Label("Exit", 285, 380) #création bouton exit
-lplay = Label("Play", 280, 450) #création bouton play
+pygame.display.set_caption("Space Invadors")
+from pygamelabel import Label                     #on importe ici car pour initialiser des fonts, pygame.init() doit avoir tourné
 
 class Party :    
+    lexit = Label("Exit", 350, 500) #création bouton exit
+    lplay = Label("Play", 350, 600) #création bouton play
+    
     def __init__(self) -> None:
+        self.screen = pygame.display.set_mode([700, 700])
         self.level = 0
         self._joueur = Joueur()
         self._allSprites = pygame.sprite.Group()
@@ -54,7 +43,6 @@ class Party :
         self._listEnnemiPioupiou = pygame.sprite.Group()
         self._listJoueurPioupiou = pygame.sprite.Group()
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
-        self.screen = pygame.display.set_mode([700, 700])
         self._score = 0
         
     def playRound(self) :
@@ -67,35 +55,6 @@ class Party :
         pygame.time.set_timer(self.ENNEMIPIOUPIOU, 5000)
 
         ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
-        
-    def CliqueSourisExit(lexit): #actions de la souris
-        if pygame.mouse.get_pressed()[0]:
-            mx, my = pygame.mouse.get_pos() #position de la souris
-            if lexit.rect.collidepoint(mx, my): #collision entre texte et souris
-                pygame.quit()
-
-    def Victory(): #écran victoire
-        myfont = pygame.font.SysFont('Comic Sans MS', 100)
-        textsurface = myfont.render('YOU WON!', True, (231, 193, 0))
-        screen.blit(textsurface,(73,200))
-        textscore = font.render('Score:', True, (255, 255, 255))
-        screen.blit(textscore, (100, 600))
-        screen.blit(self._score, (200, 600))
-
-    def GameOver(): #écran défaite
-        myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
-        textsurface = myfont.render('GAME OVER', True, (255, 0, 0)) #texte + lissage + couleur
-        screen.blit(textsurface,(50,200)) #affichage texte + position
-        textscore = font.render('Score:', True, (255, 255, 255))
-        screen.blit(textscore, (100, 600))
-
-    def Welcome(): #Ecran de démarrage
-        myfont = pygame.font.SysFont('Comic Sans MS', 40)
-        myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
-        textsurface = myfont.render('Welcome to', True, (255, 255, 255)) 
-        textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
-        screen.blit(textsurface,(220,260)) 
-        screen.blit(textgame, (10,300)) #texte à afficher + position
 
         running = True
         while running :
@@ -131,23 +90,51 @@ class Party :
             self.update()
         
         self._listEnnemis.empty()
+        print(self._joueur.isAlive, self._joueur._vie)
         return True if self._joueur.isAlive() else False
-
-        if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique
-            CliqueSourisExit(lplay)
-        screen.blit(lplay.surface, (0, 0))
-        if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique au endscreen
-            CliqueSourisExit(lexit)
-        screen.blit(lexit.surface, (0, 0))
-    Welcome() #A paramétrer aussi
-    Victory() #A paramétrer entre Victory & GameOver
         
     def update(self) :
         #actualisation de l'affichage graphique
         for sprite in self._allSprites :
-                Party.screen.blit(sprite.surf, sprite.rect)
+            self.screen.blit(sprite.surf, sprite.rect)
         pygame.display.flip()
 
 
     def terminate(self) :
         pygame.quit()
+
+    def Victory(self): #écran victoire
+        myfont = pygame.font.SysFont('Comic Sans MS', 100)
+        textsurface = myfont.render('YOU WON!', True, (231, 193, 0))
+        self.screen.blit(textsurface,(73,200))
+        textscore = myfont.render('Score:', True, (255, 255, 255))
+        self.screen.blit(textscore, (100, 600))
+        self.screen.blit(self._score, (200, 600))
+
+    def GameOver(self): #écran défaite
+        myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
+        textsurface = myfont.render('GAME OVER', True, (255, 0, 0)) #texte + lissage + couleur
+        self.screen.blit(textsurface,(50,200)) #affichage texte + position
+        textscore = myfont.render('Score:', True, (255, 255, 255))
+        self.screen.blit(textscore, (100, 600))
+
+    def Welcome(self): #Ecran de démarrage
+        myfont = pygame.font.SysFont('Comic Sans MS', 40)
+        myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
+        textWelcome = myfont.render('Welcome to', True, (255, 255, 255)) 
+        textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
+        self.screen.blit(textWelcome,(220,260)) 
+        self.screen.blit(textgame, (10,300)) #texte à afficher + position
+        return self.exitOrPlayMenu()
+
+    def exitOrPlayMenu(self) :
+        self.__class__.lexit.blit(self.screen)
+        self.__class__.lplay.blit(self.screen)
+        pygame.display.flip()
+        running = True
+        while running :
+            for event in pygame.event.get() :
+                if event.type == pygame.MOUSEBUTTONDOWN: #faire agir quand la souris clique
+                    if self.__class__.lplay.CliqueSourisLabel() : return True
+                    if self.__class__.lexit.CliqueSourisLabel() : return False
+            
