@@ -1,5 +1,5 @@
-import party
 print('Démarrage...')
+import party
 party.checkPygameInstallation()
 
 partyRunning = party.Party()
@@ -12,4 +12,3 @@ if partyRunning.Welcome() :
 
 print("Merci et à bientôt :) !")
 
-        

@@ -48,14 +48,14 @@ class Party :
         self._listEnnemis = pygame.sprite.Group()
         for y in range(4) :
             for x in range(6) :
-                newEnnemy = Ennemi(40 + self.level * 5, (100 + 100 * x, 100 + y * 100))
+                newEnnemy = Ennemi(40 + self.level * 5, (50 + 100 * x, 100 + y * 100))
                 self._listEnnemis.add(newEnnemy)
                 self._allSprites.add(newEnnemy)
         self.update()
-        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 5000)
-        pygame.time.set_timer(self.ENNEMIDIRECTION, 2500)
+        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000)
+        pygame.time.set_timer(self.ENNEMIDIRECTION, 1000)
 
-        ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
+        ennemiMoveDirection = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
 
         running = True
         while running :
@@ -64,21 +64,31 @@ class Party :
                     return False
 
                 if event.type == self.ENNEMIPIOUPIOU :
-                    choice(self._listEnnemis.sprites()).emitPioupiou()
+                    newPioupiou = choice(self._listEnnemis.sprites()).emitPioupiou()
+                    self._allSprites.add(newPioupiou)
+                    self._listEnnemiPioupiou.add(newPioupiou)
+
+                if event.type == self.ENNEMIDIRECTION :
+                    ennemiMoveDirection += 1
 
             pressed_keys = pygame.key.get_pressed()
             self._joueur.update(pressed_keys)
 
-            pariteEnnemiMove = (ennemiMoveCounter//5) % 2
-            self._listEnnemis.update("right" if pariteEnnemiMove == 0 else "left")
+            self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")
+            for pioupiou in self._listEnnemiPioupiou :
+                pioupiou.update()
+            for piouiou in self._listJoueurPioupiou :
+                piouiou.update()
 
             #gestion des colisions
-            if pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou) :
-                self._joueur.vie -= 1
+            collideJoueurPioupiouE = pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou)
+            if collideJoueurPioupiouE :
+                self._joueur.diminuerVie(1)
+                collideJoueurPioupiouE.kill()
                 running = False
-            ennemiCollideDict = pygame.sprite.groupcollide(self._listJoueurPioupiou, self._listEnnemis, False, False)
-            if ennemiCollideDict :
-                for paire in ennemiCollideDict.items() :
+            collidePioupiouJDict = pygame.sprite.groupcollide(self._listJoueurPioupiou, self._listEnnemis, False, False)
+            if collidePioupiouJDict :
+                for paire in collidePioupiouJDict.items() :
                     paire[0].kill()
                     paire[1].kill()
                     del paire[0], paire[1]
@@ -89,7 +99,6 @@ class Party :
 
             self.screen.fill((0, 0, 0))
             self.update()
-            ennemiMoveCounter += 1
         
         self._listEnnemis.empty()
         print(self._joueur.isAlive, self._joueur._vie)
@@ -100,7 +109,7 @@ class Party :
         for sprite in self._allSprites :
             self.screen.blit(sprite.surf, sprite.rect)
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(25)
 
 
     def terminate(self) :
