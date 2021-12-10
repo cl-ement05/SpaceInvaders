@@ -1,4 +1,3 @@
-from random import randint
 import pygame
 from pygame.locals import RLEACCEL
 
@@ -19,6 +18,3 @@ class Ennemi(pygame.sprite.Sprite) :
 
     def emitPioupiou(self) :
         self.pioupiou = PioupiouEnnemi((self.rect.x, self.rect.y))
-            
-    def 
-        
