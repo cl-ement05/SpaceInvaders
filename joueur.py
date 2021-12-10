@@ -6,6 +6,8 @@ from pygame.locals import (
     K_LEFT,
     K_RIGHT,
 )
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 
 class Joueur(pygame.sprite.Sprite) : 
     def __init__(self) -> None:

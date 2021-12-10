@@ -2,8 +2,6 @@ from random import choice
 from joueur import Joueur
 from ennemi import Ennemi
 from pioupiou import PioupiouEnnemi, PioupiouJoueur
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
 
 def checkPygameInstallation() :
     global pygame
