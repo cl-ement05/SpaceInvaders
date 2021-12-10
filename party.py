@@ -24,7 +24,6 @@ def checkPygameInstallation() :
 import pygame
 pygame.init()
 clock = pygame.time.Clock()
-clock.tick(30)
 pygame.display.set_caption("Space Invadors")
 from pygamelabel import Label                     #on importe ici car pour initialiser des fonts, pygame.init() doit avoir tourné
 
@@ -41,6 +40,7 @@ class Party :
         self._listEnnemiPioupiou = pygame.sprite.Group()
         self._listJoueurPioupiou = pygame.sprite.Group()
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
+        self.ENNEMIDIRECTION = pygame.USEREVENT + 2
         self._score = 0
         
     def playRound(self) :
@@ -48,9 +48,12 @@ class Party :
         self._listEnnemis = pygame.sprite.Group()
         for y in range(4) :
             for x in range(6) :
-                self._listEnnemis.add(Ennemi(40 + self.level * 5, (100 + 100 * x, 100 + y * 100)))
+                newEnnemy = Ennemi(40 + self.level * 5, (100 + 100 * x, 100 + y * 100))
+                self._listEnnemis.add(newEnnemy)
+                self._allSprites.add(newEnnemy)
         self.update()
         pygame.time.set_timer(self.ENNEMIPIOUPIOU, 5000)
+        pygame.time.set_timer(self.ENNEMIDIRECTION, 2500)
 
         ennemiMoveCounter = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 10 pixels, puis la même chose vers la gauche et ainsi de suite
 
@@ -58,7 +61,7 @@ class Party :
         while running :
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:             #-> l'utilisateur a demandé à fermer la fenêtre
-                    running = False
+                    return False
 
                 if event.type == self.ENNEMIPIOUPIOU :
                     choice(self._listEnnemis.sprites()).emitPioupiou()
@@ -73,7 +76,7 @@ class Party :
             if pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou) :
                 self._joueur.vie -= 1
                 running = False
-            ennemiCollideDict = pygame.sprite.spritecollide(self._listJoueurPioupiou, self._listEnnemis, False, False)
+            ennemiCollideDict = pygame.sprite.groupcollide(self._listJoueurPioupiou, self._listEnnemis, False, False)
             if ennemiCollideDict :
                 for paire in ennemiCollideDict.items() :
                     paire[0].kill()
@@ -84,8 +87,9 @@ class Party :
                     self.level += 1
                     running = False
 
-            Party.screen.fill((0, 0, 0))
+            self.screen.fill((0, 0, 0))
             self.update()
+            ennemiMoveCounter += 1
         
         self._listEnnemis.empty()
         print(self._joueur.isAlive, self._joueur._vie)
@@ -96,6 +100,7 @@ class Party :
         for sprite in self._allSprites :
             self.screen.blit(sprite.surf, sprite.rect)
         pygame.display.flip()
+        clock.tick(30)
 
 
     def terminate(self) :

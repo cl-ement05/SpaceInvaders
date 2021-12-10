@@ -6,9 +6,7 @@ class Ennemi(pygame.sprite.Sprite) :
     def __init__(self, vie, position: tuple) -> None:
         super(Ennemi, self).__init__()
         self._position = position
-        self._vitesseFrappe = 12
         self._vie = vie
-        self.timeTicks = 0
         self.surf = pygame.image.load("space_invader.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)

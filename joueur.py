@@ -1,10 +1,8 @@
 import pygame
 from pygame.locals import (
     RLEACCEL,
-    K_UP,
-    K_DOWN,
     K_LEFT,
-    K_RIGHT,
+    K_RIGHT
 )
 SCREEN_WIDTH = 700
 SCREEN_HEIGHT = 700
@@ -21,21 +19,13 @@ class Joueur(pygame.sprite.Sprite) :
         return self._vie > 0
 
     def update(self, pressed_keys):#les touches quand ça joue
-        if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -5)
-        if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0, 5)
         if pressed_keys[K_LEFT]:
-            self.rect.move_ip(-5, 0)
+            self.rect.move_ip(-8, 0)
         if pressed_keys[K_RIGHT]:
-            self.rect.move_ip(5, 0)
+            self.rect.move_ip(8, 0)
 
         #ne pas sortir de la map
         if self.rect.left < 0:
             self.rect.left = 0
         elif self.rect.right > SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
-        if self.rect.top <= 0:
-            self.rect.top = 0
-        elif self.rect.bottom >= SCREEN_HEIGHT:
-            self.rect.bottom = SCREEN_HEIGHT
