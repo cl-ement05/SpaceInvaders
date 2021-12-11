@@ -143,21 +143,39 @@ class Party :
     def Victory(self): #écran victoire
         myfont = pygame.font.SysFont('Comic Sans MS', 100)
         textsurface = myfont.render('YOU WON!', True, (231, 193, 0))
-        self.screen.blit(textsurface,(73,200))
         textscore = myfont.render('Score:', True, (255, 255, 255))
-        self.screen.blit(textscore, (100, 600))
-        self.screen.blit(self._score, (200, 600))
-        self.exitMenu()
+
+        running = True
+        while running :
+            for event in pygame.event.get() :
+                if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
+                    return 
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(textsurface,(73,200))
+            self.screen.blit(textscore, (100, 600))
+            self.screen.blit(self._score, (200, 600))
+            self.__class__.lexit.blit(self.screen)
+            pygame.display.flip()
+            clock.tick(25)
 
     def GameOver(self): #écran défaite
         myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
         textsurface = myfont.render('GAME OVER', True, (255, 0, 0)) #texte + lissage + couleur
-        self.screen.blit(textsurface,(50,100)) #affichage texte + position
         textscore = myfont.render('Score:', True, (255, 255, 255))
         scoreNumber = myfont.render(str(self._score), True, (255, 255, 255))
-        self.screen.blit(textscore, (200, 225))
-        self.screen.blit(scoreNumber, (225, 325))
-        self.exitMenu()
+
+        running = True
+        while running :
+            for event in pygame.event.get() :
+                if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
+                    return
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(textsurface,(50,50)) #affichage texte + position
+            self.screen.blit(textscore, (200, 200))
+            self.screen.blit(scoreNumber, (225, 300))
+            self.__class__.lexit.blit(self.screen)
+            pygame.display.flip()
+            clock.tick(25)
 
     def Welcome(self): #Ecran de démarrage
         myfont = pygame.font.SysFont('Comic Sans MS', 40)
@@ -178,13 +196,4 @@ class Party :
                 if event.type == pygame.MOUSEBUTTONDOWN: #faire réagir quand la souris clique
                     if self.__class__.lplay.CliqueSourisLabel() : return True
                     if self.__class__.lexit.CliqueSourisLabel() : return False
-
-    def exitMenu(self) :
-        self.__class__.lexit.blit(self.screen)
-        pygame.display.flip()
-        running = True
-        while running :
-            for event in pygame.event.get() :
-                if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
-                    return 
-            
+       

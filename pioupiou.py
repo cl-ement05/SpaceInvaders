@@ -10,7 +10,7 @@ class Pioupiou(pygame.sprite.Sprite):
         self._position = position
     
     def update(self) :
-        if self.rect.y > 800 : 
+        if self.rect.y > 800 or self.rect.y < -30 : 
             self.kill()
     
 class PioupiouEnnemi(Pioupiou) :
@@ -32,5 +32,5 @@ class PioupiouJoueur(Pioupiou) :
         self.rect = self.surf.get_rect(center=position)
 
     def update(self) : #monte de bas en haut quoi jusqu'à BOUM
-        self.rect.move_ip(0, -7)
+        self.rect.move_ip(0, -9)
         super().update()
