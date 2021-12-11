@@ -42,3 +42,5 @@ Le schéma qui va suivre représente chaque fichier du projet et les dépendance
 -Paul : Les pioupiou et le joueur
 -Clément : les méchants 
 -Tiphaine : le score, la map (faire des étoiles), écrans de start et de game over
+
+# Documentation

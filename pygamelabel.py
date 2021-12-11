@@ -11,7 +11,6 @@ class Label: #créer le texte cliquable
         self.text = font.render(self.content, True, (229,229,229)) #texte + lissage + couleur
         w, h = self.text.get_size() #affectation hauteur + largeur du texte
         self.surface = pygame.Surface((w, h))
-        position = ((self.x - w), (self.y - h))
         self.rect = self.surface.get_rect(center = (self.x, self.y)) #avoir la zone où on pourra cliquer sur le texe
         self.surface.blit(self.text, (0, 0))
         display.blit(self.surface, self.rect)

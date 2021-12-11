@@ -29,7 +29,7 @@ class Joueur(pygame.sprite.Sprite) :
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(8, 0)
         if pressed_keys[K_SPACE] :
-            self.instantiatePioupiou()
+            return True
 
         #ne pas sortir de la map
         if self.rect.left < 0:
@@ -38,4 +38,4 @@ class Joueur(pygame.sprite.Sprite) :
             self.rect.right = SCREEN_WIDTH
 
     def instantiatePioupiou(self) :
-        return PioupiouJoueur((self.rect.x, self.rect.y))
+        return PioupiouJoueur((self.rect.centerx, self.rect.top))

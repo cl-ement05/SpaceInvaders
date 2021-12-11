@@ -3,10 +3,9 @@ from pygame.locals import RLEACCEL
 
 from pioupiou import PioupiouEnnemi
 class Ennemi(pygame.sprite.Sprite) :
-    def __init__(self, vie, position: tuple) -> None:
+    def __init__(self, position: tuple) -> None:
         super(Ennemi, self).__init__()
         self._position = position
-        self._vie = vie
         self.surf = pygame.image.load("space_invader.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)
@@ -17,3 +16,14 @@ class Ennemi(pygame.sprite.Sprite) :
     def emitPioupiou(self) :
         self.pioupiou = PioupiouEnnemi((self.rect.x, self.rect.bottom))
         return self.pioupiou
+
+class BigBoss(Ennemi) :
+    def __init__(self, position: tuple, vie) -> None:
+        super().__init__(position)
+        self.surf = pygame.image.load("bigboss.jpg").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        self.rect = self.surf.get_rect(center=position)
+        self._vie = 10
+    
+    def retirerVie(self, malus) : self._vie -= malus
+    def isAlive(self) : return self._vie > 0
