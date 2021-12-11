@@ -34,7 +34,7 @@ class Party :
         self._joueur = Joueur()
         self._allSprites = pygame.sprite.Group()
         self._listEnnemiPioupiou = pygame.sprite.Group()
-        self._listJoueurPioupiou = pygame.sprite.Group()
+        self._joueurPioupiou = self._joueur.instantiatePioupiou()
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
         self.ENNEMIDIRECTION = pygame.USEREVENT + 2
         self._score = 0
@@ -83,45 +83,46 @@ class Party :
             #GESTION DES INPUTS
             pressed_keys = pygame.key.get_pressed()
             if self._joueur.update(pressed_keys) :                #cf documentation
-                newPioupiou = self._joueur.instantiatePioupiou()
-                self._allSprites.add(newPioupiou)
-                self._listJoueurPioupiou.add(newPioupiou)
+                if not self._joueurPioupiou.alive() :                   #on vérifie que aucun missile n'est "en cours"    
+                    newPioupiou = self._joueur.instantiatePioupiou()
+                    self._allSprites.add(newPioupiou)
+                    self._joueurPioupiou = newPioupiou
 
             #MISE A JOUR DES POSITIONS
             if not bigboss : self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")       #nombre pair -> les ennemis vont vers la droite sinon ils vont à gauche
             for pioupiou in self._listEnnemiPioupiou :
                 pioupiou.update()
-            for piouiou in self._listJoueurPioupiou :
-                piouiou.update()
+            if self._joueurPioupiou.alive() : self._joueurPioupiou.update()
 
             #GESTION DES COLLISIONS
-            collideJoueurPioupiouE = pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou)
+            collideJoueurPioupiouE = pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou)   #=sprite d'un pioupiou ennemi s'il touche le joueur
             if collideJoueurPioupiouE :
                 self._joueur.diminuerVie(1)
                 collideJoueurPioupiouE.kill()
                 running = False
-            collidePioupiouJDict = pygame.sprite.groupcollide(self._listEnnemis, self._listJoueurPioupiou, False, False)
-            if collidePioupiouJDict :
-                for ennemiCollide in collidePioupiouJDict.keys() :
-                    if not bigboss :               #si pas en mode bigboss -> le missile du joueur tue l'ennemi instantanément
-                        ennemiCollide.kill()
-                    else : 
-                        ennemiCollide.retirerVie(1)                               #sinon on retire une vie au bigboss (il faut 10 missiles pour le tuer)
-                        if not ennemiCollide.isAlive() : ennemiCollide.kill() 
-                    collidePioupiouJDict[ennemiCollide][0].kill()
-                    self._score += 10
+            
+            ennemiCollide = pygame.sprite.spritecollideany(self._joueurPioupiou, self._listEnnemis)   #on récupère l'ennemi qui a été touché par le missile du joueur
+            if ennemiCollide :
+                print(self._joueurPioupiou, ennemiCollide)
+                if not bigboss :               #si pas en mode bigboss -> le missile du joueur tue l'ennemi instantanément
+                    ennemiCollide.kill()
+                    self._joueurPioupiou.kill()
+                else : 
+                    ennemiCollide.retirerVie(1)                               #sinon on retire une vie au bigboss (il faut 10 missiles pour le tuer)
+                    if not ennemiCollide.isAlive() : ennemiCollide.kill() 
+                self._score += 10
                 if len(self._listEnnemis.sprites()) == 0 :     
                     self.level += 1
                     running = False
 
             self.screen.fill((0, 0, 0))
             self.update()
+            
         
         #Sortie de boucle -> suppression des sprites, mises a jour de qq variables et vérification des vies du joueur
         for sprite in self._allSprites :
             sprite.kill()
         self.update()
-        pygame.display.flip()
         joueurOK = self._joueur.isAlive()
         if joueurOK and not bigboss : return "continue" #pas de bigboss -> on continue la partie et on passe au niveau suivant
         elif joueurOK and bigboss : return "win"
@@ -133,7 +134,6 @@ class Party :
             self.screen.blit(sprite.surf, sprite.rect)
         pygame.display.flip()
         clock.tick(25)           #permet de maintenir 25fps
-
 
     def terminate(self) :
         pygame.quit()
