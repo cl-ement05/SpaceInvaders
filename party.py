@@ -34,7 +34,7 @@ class Party :
         self._joueur = Joueur()
         self._allSprites = pygame.sprite.Group()
         self._listEnnemiPioupiou = pygame.sprite.Group()
-        self._joueurPioupiou = self._joueur.instantiatePioupiou()
+        self._joueurPioupiou = pygame.sprite.Group()
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
         self.ENNEMIDIRECTION = pygame.USEREVENT + 2
         self._score = 0
@@ -83,16 +83,17 @@ class Party :
             #GESTION DES INPUTS
             pressed_keys = pygame.key.get_pressed()
             if self._joueur.update(pressed_keys) :                #cf documentation
-                if not self._joueurPioupiou.alive() :                   #on vérifie que aucun missile n'est "en cours"    
+                if len(self._joueurPioupiou.sprites()) == 0 :                   #on vérifie que aucun missile n'est "en cours"    
                     newPioupiou = self._joueur.instantiatePioupiou()
                     self._allSprites.add(newPioupiou)
-                    self._joueurPioupiou = newPioupiou
+                    self._joueurPioupiou.add(newPioupiou)
 
             #MISE A JOUR DES POSITIONS
             if not bigboss : self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")       #nombre pair -> les ennemis vont vers la droite sinon ils vont à gauche
             for pioupiou in self._listEnnemiPioupiou :
                 pioupiou.update()
-            if self._joueurPioupiou.alive() : self._joueurPioupiou.update()
+            for pioupiou in self._joueurPioupiou.sprites() :
+                pioupiou.update()
 
             #GESTION DES COLLISIONS
             collideJoueurPioupiouE = pygame.sprite.spritecollideany(self._joueur, self._listEnnemiPioupiou)   #=sprite d'un pioupiou ennemi s'il touche le joueur
@@ -101,16 +102,17 @@ class Party :
                 collideJoueurPioupiouE.kill()
                 running = False
             
-            ennemiCollide = pygame.sprite.spritecollideany(self._joueurPioupiou, self._listEnnemis)   #on récupère l'ennemi qui a été touché par le missile du joueur
-            if ennemiCollide :
-                print(self._joueurPioupiou, ennemiCollide)
-                if not bigboss :               #si pas en mode bigboss -> le missile du joueur tue l'ennemi instantanément
-                    ennemiCollide.kill()
-                    self._joueurPioupiou.kill()
-                else : 
-                    ennemiCollide.retirerVie(1)                               #sinon on retire une vie au bigboss (il faut 10 missiles pour le tuer)
-                    if not ennemiCollide.isAlive() : ennemiCollide.kill() 
-                self._score += 10
+            ennemiCollideDict = pygame.sprite.groupcollide(self._listEnnemis, self._joueurPioupiou, False, False)   #on récupère l'ennemi qui a été touché par le missile du joueur
+            if ennemiCollideDict :
+                for ennemi in ennemiCollideDict.keys() :
+                    print(ennemi, ennemiCollideDict[ennemi])
+                    if not bigboss :               #si pas en mode bigboss -> le missile du joueur tue l'ennemi instantanément
+                        ennemi.kill()
+                        ennemiCollideDict[ennemi].kill()
+                    else : 
+                        ennemi.retirerVie(1)                               #sinon on retire une vie au bigboss (il faut 10 missiles pour le tuer)
+                        if not ennemi.isAlive() : ennemi.kill() 
+                    self._score += 10
                 if len(self._listEnnemis.sprites()) == 0 :     
                     self.level += 1
                     running = False
