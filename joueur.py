@@ -14,7 +14,7 @@ class Joueur(pygame.sprite.Sprite) :
     def __init__(self) -> None:
         super(Joueur, self).__init__()#permet d'initialiser la classe parente. Equivalent à super().__init__(self)
         self._vie = 3
-        self.surf = pygame.image.load("joueur.jpg").convert()
+        self.surf = pygame.image.load("images/joueur.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=(350,600))
 

@@ -16,7 +16,7 @@ class Pioupiou(pygame.sprite.Sprite):
 class PioupiouEnnemi(Pioupiou) :
     def __init__(self, position):
         super().__init__(position)
-        self.surf = pygame.image.load("pioupiou-ennemi.jpg").convert()
+        self.surf = pygame.image.load("images/pioupiou-ennemi.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)
 
@@ -27,7 +27,7 @@ class PioupiouEnnemi(Pioupiou) :
 class PioupiouJoueur(Pioupiou) :
     def __init__(self, position):
         super().__init__(position)
-        self.surf = pygame.image.load("IMAGE-PIOUPIOU.jpg").convert()
+        self.surf = pygame.image.load("images/IMAGE-PIOUPIOU.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)
 

@@ -6,7 +6,7 @@ class Ennemi(pygame.sprite.Sprite) :
     def __init__(self, position: tuple) -> None:
         super(Ennemi, self).__init__()
         self._position = position
-        self.surf = pygame.image.load("space_invader.jpg").convert()
+        self.surf = pygame.image.load("images/space_invader.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)
     
@@ -20,7 +20,7 @@ class Ennemi(pygame.sprite.Sprite) :
 class BigBoss(Ennemi) :
     def __init__(self, position: tuple) -> None:
         super().__init__(position)
-        self.surf = pygame.image.load("bigboss2.jpg").convert()
+        self.surf = pygame.image.load("images/bigboss.jpg").convert()
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=position)
         self._vie = 10
