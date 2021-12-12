@@ -19,8 +19,9 @@ from random import choice
 from joueur import Joueur
 from ennemi import BigBoss, Ennemi
 
-
+#init de pygame et chargement en mémoire des sons, du background...
 pygame.init()
+background = pygame.image.load("images/background.jpg")
 pygame.mixer.init()
 firePioupiou = pygame.mixer.Sound("audio/shoot.wav")
 ennemiKilled = pygame.mixer.Sound("audio/invaderkilled.wav")
@@ -60,7 +61,7 @@ class Party :
             bigboss = False
             for y in range(4) :
                 for x in range(6) :
-                    newEnnemy = Ennemi((50 + 100 * x, 100 + y * 100))
+                    newEnnemy = Ennemi((50 + 100 * x, 100 + y * 100), "blue_space_invader.jpg" if y < 2 else "space_invader.jpg")        #on met des invaders bleus sur les 2 premières lignes
                     self._listEnnemis.add(newEnnemy)
                     self._allSprites.add(newEnnemy)
         self.update()
@@ -126,7 +127,7 @@ class Party :
                     self.level += 1
                     running = False
             
-            self.screen.fill((0, 0, 0))
+            self.screen.blit(background, (0, 0))
             #pour pouvoir afficher le score, les points de vie du joueur et le niveau de la partie durant le jeu
             igfont = pygame.font.SysFont('Comic Sans MS', 26) #taille + style police du texte
             ScoreNumberig = igfont.render(str(self._score), True, (255, 255, 255))
@@ -153,7 +154,8 @@ class Party :
             if joueurOK : return "continue" #pas de bigboss -> on continue la partie et on passe au niveau suivant
             else : return "over"
         else :
-            if joueurOK : return "win"
+            if joueurOK and boss.isAlive() : return "continue"
+            if joueurOK and not boss.isAlive() : return "win"
             else : return "over"
         
     def update(self) :
@@ -164,6 +166,8 @@ class Party :
         clock.tick(25)           #permet de maintenir 25fps
 
     def terminate(self) :
+        pygame.mixer.music.stop()
+        pygame.mixer.quit()
         pygame.quit()
 
 
@@ -185,7 +189,7 @@ class Party :
             for event in pygame.event.get() :
                 if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
                     return
-            self.screen.fill((0, 0, 0))
+            self.screen.blit(background, (0, 0))
             self.screen.blit(textsurface,(50,50)) #affichage texte + position
             self.screen.blit(textscore, (200, 200))
             self.screen.blit(scoreNumber, (225, 300))
@@ -198,6 +202,7 @@ class Party :
         myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
         textWelcome = myfont.render('Welcome to', True, (255, 255, 255)) 
         textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
+        self.screen.blit(background, (0, 0))
         self.screen.blit(textWelcome,(220,260)) 
         self.screen.blit(textgame, (10,300)) #texte à afficher + position
         self.__class__.lexit.blit(self.screen)
