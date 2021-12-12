@@ -52,7 +52,7 @@ class Party :
 
         #init et création des ennemis
         #si on atteint le niveau 20, big boss
-        if self.level == 19 :
+        if self.level == 9 :
             boss = BigBoss((250, 250))
             self._listEnnemis.add(boss)
             self._allSprites.add(boss)
@@ -67,7 +67,7 @@ class Party :
         self.update()
 
         #Déclaration des events custom
-        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000 - 500 * self.level)
+        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000 - 400 * self.level)
         pygame.time.set_timer(self.ENNEMIDIRECTION, 1000)                       #permet de faire le va et vient des ennemis ; toutes les secondes : changement de direction
 
         ennemiMoveDirection = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 4 pixels, puis la même chose vers la gauche et ainsi de suite
