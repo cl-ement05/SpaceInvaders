@@ -57,7 +57,7 @@ class Party :
                 fileData = file.readline()
             highscore = fileData.split("=")[1]
             self._highscore = int(highscore)
-        except (FileNotFoundError, IOError, ValueError) :
+        except (FileNotFoundError, IOError, ValueError, IndexError) :
             self._highscore = 0
             with open("data", "w") as file :
                 file.write("highscore=0")
@@ -206,9 +206,9 @@ class Party :
                 highscore = Label("Highscore : " + str(self._highscore), 350, 500)
         
         myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
-        textsurface = myfont.render(text, True, textcolor) #texte + lissage + couleur
-        textscore = myfont.render('Score:', True, (255, 255, 255))
-        scoreNumber = myfont.render(str(self._score), True, (255, 255, 255))
+        textsurface = Label(text, 350, 100, textcolor, myfont)
+        textscore = Label('Score:', 350, 225, (255, 255, 255), myfont)
+        scoreNumber = Label(str(self._score), 350, 375, (255, 255, 255), myfont)
 
         running = True
         while running :
@@ -216,9 +216,9 @@ class Party :
                 if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
                     return
             self._screen.blit(background, (0, 0))
-            self._screen.blit(textsurface,(50,50)) #affichage texte + position
-            self._screen.blit(textscore, (200, 200))
-            self._screen.blit(scoreNumber, (225, 300))
+            textsurface.blit(self._screen)
+            textscore.blit(self._screen)
+            scoreNumber.blit(self._screen)
             self.__class__.lexit.blit(self._screen)
             if self._highscore != None : highscore.blit(self._screen)
             pygame.display.flip()
