@@ -15,7 +15,7 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
 - Au début :
   * Ennemi :
     + 1 vie
-    + 1 missile/5sec
+    + 1 missile/4sec
   * Boss :
     + Attend le joueur bien sagement au 10e round
     + 10 vies
@@ -27,24 +27,21 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
   * Augmentation de la vitesse de tir des pioupious ennemis
 
 # Options
-On a de la musique gucci
+On a de la musique
 
 # Arborescence du projet
 Le schéma qui va suivre représente chaque fichier du projet et les dépendances qu'il peut avoir. Il est donc essentiel qu'il soit respecté lors du développement
 ```
 |
 |-main.py -> programme principal, maître
-  |- party.py -> classe contenant des infos contenant la partie (score...), gère tous les objets comme les ennemis, missiles...; s'occupe de l'affichage -> mise à jour faite grâce à l'appel de fonction (playRound()), création d'ennemis... ; 1 instance devrait être créée dans le main
-    |- pygame.py -> permet de stocker des vars du pygame (écran, la surface) mais c'est une data class : elle ne sert qu'à stocker des données, on n'exécute aucune fonction ; 1 instance devrait être crée par party.py
-    |- ennemi.py -> autant d'instances que nécessaire, créées par party.py
+  |- party.py -> classe contenant des infos contenant la partie (score...), gère tous les objets comme les ennemis, missiles...; s'occupe de l'affichage -> mise à jour ; 1 instance devrait être créée dans le main
+    |- ennemi.py -> autant d'instances que nécessaire, créées par party.py ; contient également la classe bigboss qui hérite de ennemi
     |- joueur.py -> représente le personnage, ses vies... ; 1 seule instance devrait être créée par party.py et conservée tout au long d'une même partie 
-    |- pioupiou.py
+    |- pioupiou.py -> autant d'instances que nécessaire, créées par party.py ; contient la classe Pioupiou mère (ne jamais utiliser cette classe !) et les 2 classes filles pour différencier les pioupious joueur et ennemi
+    |- pygamelabel.py -> classe utilisée pour afficher les labels cliquables/interactifs
 ```
 
 # répartition
 -Paul : Les pioupiou, le joueur, les images, le ReadMe et pré-alpha du jeu(=les tests).
 -Clément : les méchants, le fonctionnement général une fois tout réunit, ajustements suite à la pré-alpha.
 -Tiphaine : le score, la map, écrans de start et de game over et la présentation
-
-# Documentation
-  RealPygame pour apprendre la bibliothèque PyGame

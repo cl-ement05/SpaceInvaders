@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 from pygame.locals import RLEACCEL
 
@@ -30,3 +31,7 @@ class BigBoss(Ennemi) :
 
     def update(self, moveDirection) :
         self.rect.move_ip(-8 if moveDirection == "left" else 8, 0)
+
+    def emitPioupiou(self) :
+        self.pioupiou = PioupiouEnnemi((self.rect.centerx, randint(self.rect.left, self.rect.right)))
+        return self.pioupiou

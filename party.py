@@ -46,7 +46,6 @@ class Party :
         pygame.mixer.music.play(loops=-1)
         
     def playRound(self) :
-        print("ROUND", self.level + 1)
         self._allSprites.add(self._joueur)
         self._listEnnemis = pygame.sprite.Group()
 
@@ -135,7 +134,7 @@ class Party :
             Lifelabel = igfont.render('Life:', True, (241, 57, 57))
             LifeNumber = igfont.render(str(self._joueur._vie), True, (255, 255, 255))
             Levellabel = igfont.render('Level:', True, (53, 196, 38))
-            LevelNumber = igfont.render(str(self.level), True, (255, 255, 255))
+            LevelNumber = igfont.render(str(self.level + 1), True, (255, 255, 255))
             self.screen.blit(Lifelabel, (20, 17))
             self.screen.blit(LifeNumber, (80, 17))
             self.screen.blit(Scorelabel, (270, 17))
@@ -150,9 +149,12 @@ class Party :
             sprite.kill()
         self.update()
         joueurOK = self._joueur.isAlive()
-        if joueurOK and not bigboss : return "continue" #pas de bigboss -> on continue la partie et on passe au niveau suivant
-        elif joueurOK and bigboss : return "win"
-        elif not joueurOK : return "over"
+        if not bigboss : 
+            if joueurOK : return "continue" #pas de bigboss -> on continue la partie et on passe au niveau suivant
+            else : return "over"
+        else :
+            if joueurOK : return "win"
+            else : return "over"
         
     def update(self) :
         #actualisation de l'affichage graphique

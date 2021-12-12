@@ -11,9 +11,11 @@ if partyRunning.Welcome() :
             continuer = False
         elif status == "over" :
             partyRunning.GameOver()
+            partyRunning.terminate()
             continuer = False
         elif status == "win" :
             partyRunning.Victory()
+            partyRunning.terminate()
             continuer = False
 
 print("Merci et à bientôt :) !")
