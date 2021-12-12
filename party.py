@@ -126,8 +126,22 @@ class Party :
                 if len(self._listEnnemis.sprites()) == 0 :     
                     self.level += 1
                     running = False
-
+            
             self.screen.fill((0, 0, 0))
+            #pour pouvoir afficher le score, les points de vie du joueur et le niveau de la partie durant le jeu
+            igfont = pygame.font.SysFont('Comic Sans MS', 26) #taille + style police du texte
+            ScoreNumberig = igfont.render(str(self._score), True, (255, 255, 255))
+            Scorelabel = igfont.render('Score:', True, (248, 233, 0))
+            Lifelabel = igfont.render('Life:', True, (241, 57, 57))
+            LifeNumber = igfont.render(str(self._joueur._vie), True, (255, 255, 255))
+            Levellabel = igfont.render('Level:', True, (53, 196, 38))
+            LevelNumber = igfont.render(str(self.level), True, (255, 255, 255))
+            self.screen.blit(Lifelabel, (20, 17))
+            self.screen.blit(LifeNumber, (80, 17))
+            self.screen.blit(Scorelabel, (270, 17))
+            self.screen.blit(ScoreNumberig, (355, 17))
+            self.screen.blit(Levellabel, (580, 17))
+            self.screen.blit(LevelNumber, (654, 17))
             self.update()
             
         
