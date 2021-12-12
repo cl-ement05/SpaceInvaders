@@ -14,17 +14,20 @@ Jeu SpaceInvaders par Tiphaine Fournier, Paul Cornea et Clément Garrigou
 - Le centre du joueur lui se balade sur une droite d'équation y = 600
 - Au début :
   * Ennemi :
-    + 40 points de vie
+    + 1 vie
     + 1 missile/5sec
+  * Boss :
+    + Attend le joueur bien sagement au 10e round
+    + 10 vies
   * Joueur et ses pioupious :
     + Lorsque atteint par un missile ennemi : -1 vie
-    + 1 missile : 40 dégâts à un ennemi 
+    + 1 missile : retire 1 vie aux ennemis (les petits meurent)
     + 3 vies
-- A chaque nouvveau round :
-  * Augmentation des points de vie d'un ennemi : + 5
+- A chaque nouveau round :
+  * Augmentation de la vitesse de tir des pioupious ennemis
 
 # Options
-mettre un nombre X de barrières en fonction du numéro Y du round
+On a de la musique gucci
 
 # Arborescence du projet
 Le schéma qui va suivre représente chaque fichier du projet et les dépendances qu'il peut avoir. Il est donc essentiel qu'il soit respecté lors du développement
@@ -39,8 +42,9 @@ Le schéma qui va suivre représente chaque fichier du projet et les dépendance
 ```
 
 # répartition
--Paul : Les pioupiou et le joueur
--Clément : les méchants 
--Tiphaine : le score, la map (faire des étoiles), écrans de start et de game over
+-Paul : Les pioupiou, le joueur, les images, le ReadMe et pré-alpha du jeu(=les tests).
+-Clément : les méchants, le fonctionnement général une fois tout réunit, ajustements suite à la pré-alpha.
+-Tiphaine : le score, la map, écrans de start et de game over et la présentation
 
 # Documentation
+  RealPygame pour apprendre la bibliothèque PyGame
