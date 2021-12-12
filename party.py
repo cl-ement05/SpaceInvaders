@@ -1,11 +1,7 @@
-from random import choice
-from joueur import Joueur
-from ennemi import BigBoss, Ennemi
-
 try : 
     import pygame
 except ImportError :
-    print("Erreur le module pygame est requis pour le bon fonctionnement de ce jeu")
+    print("Erreur : le module pygame est requis pour le bon fonctionnement de ce jeu")
     print("Voulez-vous que nous installions automatiquement ce module (Y/n)", end = " ")
     if input("") != "n" :
         print("Installation de pygame en cours...")
@@ -18,6 +14,11 @@ except ImportError :
             print("Une erreur est survenue veuillez réessayer")
             exit()
     else : exit()
+
+from random import choice
+from joueur import Joueur
+from ennemi import BigBoss, Ennemi
+
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -42,15 +43,17 @@ class Party :
     def playRound(self) :
         print("ROUND", self.level + 1)
         self._allSprites.add(self._joueur)
+        self._listEnnemis = pygame.sprite.Group()
 
         #init et création des ennemis
         #si on atteint le niveau 20, big boss
         if self.level == 19 :
-            self._listEnnemis.add(BigBoss(350, 250))
+            boss = BigBoss((250, 250))
+            self._listEnnemis.add(boss)
+            self._allSprites.add(boss)
             bigboss = True
         else :
             bigboss = False
-            self._listEnnemis = pygame.sprite.Group()
             for y in range(4) :
                 for x in range(6) :
                     newEnnemy = Ennemi((50 + 100 * x, 100 + y * 100))
@@ -89,7 +92,7 @@ class Party :
                     self._joueurPioupiou.add(newPioupiou)
 
             #MISE A JOUR DES POSITIONS
-            if not bigboss : self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")       #nombre pair -> les ennemis vont vers la droite sinon ils vont à gauche
+            self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")       #nombre pair -> les ennemis vont vers la droite sinon ils vont à gauche
             for pioupiou in self._listEnnemiPioupiou :
                 pioupiou.update()
             for pioupiou in self._joueurPioupiou.sprites() :
@@ -105,12 +108,12 @@ class Party :
             ennemiCollideDict = pygame.sprite.groupcollide(self._listEnnemis, self._joueurPioupiou, False, False)   #on récupère l'ennemi qui a été touché par le missile du joueur
             if ennemiCollideDict :
                 for ennemi in ennemiCollideDict.keys() :
-                    print(ennemi, ennemiCollideDict[ennemi])
                     if not bigboss :               #si pas en mode bigboss -> le missile du joueur tue l'ennemi instantanément
                         ennemi.kill()
-                        ennemiCollideDict[ennemi].kill()
+                        ennemiCollideDict[ennemi][0].kill()
                     else : 
                         ennemi.retirerVie(1)                               #sinon on retire une vie au bigboss (il faut 10 missiles pour le tuer)
+                        ennemiCollideDict[ennemi][0].kill()
                         if not ennemi.isAlive() : ennemi.kill() 
                     self._score += 10
                 if len(self._listEnnemis.sprites()) == 0 :     
@@ -143,26 +146,14 @@ class Party :
 
     #ECRANS
     def Victory(self): #écran victoire
-        myfont = pygame.font.SysFont('Comic Sans MS', 100)
-        textsurface = myfont.render('YOU WON!', True, (231, 193, 0))
-        textscore = myfont.render('Score:', True, (255, 255, 255))
-
-        running = True
-        while running :
-            for event in pygame.event.get() :
-                if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
-                    return 
-            self.screen.fill((0, 0, 0))
-            self.screen.blit(textsurface,(73,200))
-            self.screen.blit(textscore, (100, 600))
-            self.screen.blit(self._score, (200, 600))
-            self.__class__.lexit.blit(self.screen)
-            pygame.display.flip()
-            clock.tick(25)
+        self.endScreen('YOU WON', (231, 193, 0))
 
     def GameOver(self): #écran défaite
+        self.endScreen("GAME OVER", (255, 0, 0))
+
+    def endScreen(self, text: str, textcolor: tuple) :
         myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
-        textsurface = myfont.render('GAME OVER', True, (255, 0, 0)) #texte + lissage + couleur
+        textsurface = myfont.render(text, True, textcolor) #texte + lissage + couleur
         textscore = myfont.render('Score:', True, (255, 255, 255))
         scoreNumber = myfont.render(str(self._score), True, (255, 255, 255))
 
@@ -186,9 +177,6 @@ class Party :
         textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
         self.screen.blit(textWelcome,(220,260)) 
         self.screen.blit(textgame, (10,300)) #texte à afficher + position
-        return self.exitOrPlayMenu()
-
-    def exitOrPlayMenu(self) :
         self.__class__.lexit.blit(self.screen)
         self.__class__.lplay.blit(self.screen)
         pygame.display.flip()
