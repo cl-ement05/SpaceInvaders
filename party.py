@@ -57,7 +57,6 @@ class Party :
 
         #init et création des ennemis
         #si on atteint le niveau 10, big boss
-        self.level = 9
         if self.level == 9 :
             boss = BigBoss((250, 250))
             self._listEnnemis.add(boss)
