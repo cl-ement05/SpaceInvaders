@@ -207,7 +207,7 @@ class Party :
         myfont = pygame.font.SysFont('Comic Sans MS', 40)
         myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
         textWelcome = myfont.render('Welcome to', True, (255, 255, 255)) 
-        textgame = myfont2.render('SPACE INVADORS', True, (255, 255, 255)) #texte + antialiasing + couleur
+        textgame = myfont2.render('SPACE INVADERS', True, (255, 255, 255)) #texte + antialiasing + couleur
         self.screen.blit(background, (0, 0))
         self.screen.blit(textWelcome,(220,260)) 
         self.screen.blit(textgame, (10,300)) #texte à afficher + position
