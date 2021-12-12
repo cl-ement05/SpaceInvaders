@@ -22,10 +22,15 @@ from ennemi import BigBoss, Ennemi
 #init de pygame et chargement en mémoire des sons, du background...
 pygame.init()
 background = pygame.image.load("images/background.jpg")
+
+#audio
 pygame.mixer.init()
 firePioupiou = pygame.mixer.Sound("audio/shoot.wav")
 ennemiKilled = pygame.mixer.Sound("audio/invaderkilled.wav")
 mainMusic = pygame.mixer.music.load("audio/spaceinvaders1.wav")
+playerDeath = pygame.mixer.Sound("audio/explosion.wav")
+pygame.mixer.music.set_volume(0.5)
+
 clock = pygame.time.Clock()
 pygame.display.set_caption("Space Invadors")
 from pygamelabel import Label                     #on importe ici car pour initialiser des fonts, pygame.init() doit avoir tourné
@@ -52,6 +57,7 @@ class Party :
 
         #init et création des ennemis
         #si on atteint le niveau 10, big boss
+        self.level = 9
         if self.level == 9 :
             boss = BigBoss((250, 250))
             self._listEnnemis.add(boss)
@@ -110,6 +116,7 @@ class Party :
                 self._joueur.diminuerVie(1)
                 collideJoueurPioupiouE.kill()
                 running = False
+                playerDeath.play()
             
             ennemiCollideDict = pygame.sprite.groupcollide(self._listEnnemis, self._joueurPioupiou, False, False)   #on récupère l'ennemi qui a été touché par le missile du joueur
             if ennemiCollideDict :
