@@ -51,7 +51,7 @@ class Party :
         self._listEnnemis = pygame.sprite.Group()
 
         #init et création des ennemis
-        #si on atteint le niveau 20, big boss
+        #si on atteint le niveau 10, big boss
         if self.level == 9 :
             boss = BigBoss((250, 250))
             self._listEnnemis.add(boss)
