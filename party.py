@@ -21,6 +21,10 @@ from ennemi import BigBoss, Ennemi
 
 
 pygame.init()
+pygame.mixer.init()
+firePioupiou = pygame.mixer.Sound("audio/shoot.wav")
+ennemiKilled = pygame.mixer.Sound("audio/invaderkilled.wav")
+mainMusic = pygame.mixer.music.load("audio/spaceinvaders1.wav")
 clock = pygame.time.Clock()
 pygame.display.set_caption("Space Invadors")
 from pygamelabel import Label                     #on importe ici car pour initialiser des fonts, pygame.init() doit avoir tourné
@@ -39,6 +43,7 @@ class Party :
         self.ENNEMIPIOUPIOU = pygame.USEREVENT + 1
         self.ENNEMIDIRECTION = pygame.USEREVENT + 2
         self._score = 0
+        pygame.mixer.music.play(loops=-1)
         
     def playRound(self) :
         print("ROUND", self.level + 1)
@@ -90,6 +95,7 @@ class Party :
                     newPioupiou = self._joueur.instantiatePioupiou()
                     self._allSprites.add(newPioupiou)
                     self._joueurPioupiou.add(newPioupiou)
+                    firePioupiou.play()
 
             #MISE A JOUR DES POSITIONS
             self._listEnnemis.update("right" if ennemiMoveDirection % 2 == 0 else "left")       #nombre pair -> les ennemis vont vers la droite sinon ils vont à gauche
@@ -116,6 +122,7 @@ class Party :
                         ennemiCollideDict[ennemi][0].kill()
                         if not ennemi.isAlive() : ennemi.kill() 
                     self._score += 10
+                    ennemiKilled.play()
                 if len(self._listEnnemis.sprites()) == 0 :     
                     self.level += 1
                     running = False
