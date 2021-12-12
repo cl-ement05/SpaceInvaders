@@ -36,12 +36,12 @@ pygame.display.set_caption("Space Invadors")
 from pygamelabel import Label                     #on importe ici car pour initialiser des fonts, pygame.init() doit avoir tourné
 
 class Party :    
-    lexit = Label("Exit", 350, 500) #création bouton exit
-    lplay = Label("Play", 350, 600) #création bouton play
+    lexit = Label("Exit", 350, 600) #création bouton exit
+    lplay = Label("Play", 350, 500) #création bouton play
     
     def __init__(self) -> None:
-        self.screen = pygame.display.set_mode([700, 700])
-        self.level = 0
+        self._screen = pygame.display.set_mode([700, 700])
+        self._level = 0
         self._joueur = Joueur()
         self._allSprites = pygame.sprite.Group()
         self._listEnnemiPioupiou = pygame.sprite.Group()
@@ -50,6 +50,17 @@ class Party :
         self.ENNEMIDIRECTION = pygame.USEREVENT + 2
         self._score = 0
         pygame.mixer.music.play(loops=-1)
+
+        #récupération s'il existe d'un high score
+        try :
+            with open("data", "r") as file :
+                fileData = file.readline()
+            highscore = fileData.split("=")[1]
+            self._highscore = int(highscore)
+        except (FileNotFoundError, IOError, ValueError) :
+            self._highscore = 0
+            with open("data", "w") as file :
+                file.write("highscore=0")
         
     def playRound(self) :
         self._allSprites.add(self._joueur)
@@ -57,7 +68,7 @@ class Party :
 
         #init et création des ennemis
         #si on atteint le niveau 10, big boss
-        if self.level == 9 :
+        if self._level == 9 :
             boss = BigBoss((250, 250))
             self._listEnnemis.add(boss)
             self._allSprites.add(boss)
@@ -72,11 +83,17 @@ class Party :
         self.update()
 
         #Déclaration des events custom
-        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000 - 400 * self.level)
+        pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000 - 400 * self._level)
         pygame.time.set_timer(self.ENNEMIDIRECTION, 1000)                       #permet de faire le va et vient des ennemis ; toutes les secondes : changement de direction
 
         ennemiMoveDirection = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 4 pixels, puis la même chose vers la gauche et ainsi de suite
 
+        #labels pour pouvoir afficher le score, les points de vie du joueur et le niveau de la partie durant le jeu
+        igfont = pygame.font.SysFont('Comic Sans MS', 26) #taille + style police du texte
+        Levellabel = igfont.render('Level:', True, (53, 196, 38))
+        Scorelabel = igfont.render('Score:', True, (248, 233, 0))
+        Lifelabel = igfont.render('Life:', True, (241, 57, 57))
+        
         #BOUCLE DE JEU
         running = True
         while running :
@@ -130,24 +147,19 @@ class Party :
                     self._score += 10
                     ennemiKilled.play()
                 if len(self._listEnnemis.sprites()) == 0 :     
-                    self.level += 1
+                    self._level += 1
                     running = False
             
-            self.screen.blit(background, (0, 0))
-            #pour pouvoir afficher le score, les points de vie du joueur et le niveau de la partie durant le jeu
-            igfont = pygame.font.SysFont('Comic Sans MS', 26) #taille + style police du texte
+            self._screen.blit(background, (0, 0))
             ScoreNumberig = igfont.render(str(self._score), True, (255, 255, 255))
-            Scorelabel = igfont.render('Score:', True, (248, 233, 0))
-            Lifelabel = igfont.render('Life:', True, (241, 57, 57))
             LifeNumber = igfont.render(str(self._joueur._vie), True, (255, 255, 255))
-            Levellabel = igfont.render('Level:', True, (53, 196, 38))
-            LevelNumber = igfont.render(str(self.level + 1), True, (255, 255, 255))
-            self.screen.blit(Lifelabel, (20, 17))
-            self.screen.blit(LifeNumber, (80, 17))
-            self.screen.blit(Scorelabel, (270, 17))
-            self.screen.blit(ScoreNumberig, (355, 17))
-            self.screen.blit(Levellabel, (580, 17))
-            self.screen.blit(LevelNumber, (654, 17))
+            LevelNumber = igfont.render(str(self._level + 1), True, (255, 255, 255))
+            self._screen.blit(Lifelabel, (20, 17))
+            self._screen.blit(LifeNumber, (80, 17))
+            self._screen.blit(Scorelabel, (270, 17))
+            self._screen.blit(ScoreNumberig, (355, 17))
+            self._screen.blit(Levellabel, (580, 17))
+            self._screen.blit(LevelNumber, (654, 17))
             self.update()
             
         
@@ -167,7 +179,7 @@ class Party :
     def update(self) :
         #actualisation de l'affichage graphique
         for sprite in self._allSprites :
-            self.screen.blit(sprite.surf, sprite.rect)
+            self._screen.blit(sprite.surf, sprite.rect)
         pygame.display.flip()
         clock.tick(25)           #permet de maintenir 25fps
 
@@ -185,6 +197,14 @@ class Party :
         self.endScreen("GAME OVER", (255, 0, 0))
 
     def endScreen(self, text: str, textcolor: tuple) :
+        if self._highscore != None : 
+            if self._score > self._highscore :
+                with open("data", "w") as file :
+                    file.write("highscore=" + str(self._score))
+                highscore = Label("New highscore ! " + str(self._score), 350, 500)
+            else :
+                highscore = Label("Highscore : " + str(self._highscore), 350, 500)
+        
         myfont = pygame.font.SysFont('Comic Sans MS', 100) #taille + style police du texte
         textsurface = myfont.render(text, True, textcolor) #texte + lissage + couleur
         textscore = myfont.render('Score:', True, (255, 255, 255))
@@ -195,11 +215,12 @@ class Party :
             for event in pygame.event.get() :
                 if event.type == pygame.MOUSEBUTTONDOWN and self.__class__.lexit.CliqueSourisLabel() : 
                     return
-            self.screen.blit(background, (0, 0))
-            self.screen.blit(textsurface,(50,50)) #affichage texte + position
-            self.screen.blit(textscore, (200, 200))
-            self.screen.blit(scoreNumber, (225, 300))
-            self.__class__.lexit.blit(self.screen)
+            self._screen.blit(background, (0, 0))
+            self._screen.blit(textsurface,(50,50)) #affichage texte + position
+            self._screen.blit(textscore, (200, 200))
+            self._screen.blit(scoreNumber, (225, 300))
+            self.__class__.lexit.blit(self._screen)
+            if self._highscore != None : highscore.blit(self._screen)
             pygame.display.flip()
             clock.tick(25)
 
@@ -208,11 +229,11 @@ class Party :
         myfont2 = pygame.font.SysFont('Comic Sans MS', 75) #police + taille
         textWelcome = myfont.render('Welcome to', True, (255, 255, 255)) 
         textgame = myfont2.render('SPACE INVADERS', True, (255, 255, 255)) #texte + antialiasing + couleur
-        self.screen.blit(background, (0, 0))
-        self.screen.blit(textWelcome,(220,260)) 
-        self.screen.blit(textgame, (10,300)) #texte à afficher + position
-        self.__class__.lexit.blit(self.screen)
-        self.__class__.lplay.blit(self.screen)
+        self._screen.blit(background, (0, 0))
+        self._screen.blit(textWelcome,(220,260)) 
+        self._screen.blit(textgame, (10,300)) #texte à afficher + position
+        self.__class__.lexit.blit(self._screen)
+        self.__class__.lplay.blit(self._screen)
         pygame.display.flip()
         running = True
         while running :

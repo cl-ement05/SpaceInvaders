@@ -15,8 +15,8 @@ class Ennemi(pygame.sprite.Sprite) :
         self.rect.move_ip(-4 if moveDirection == "left" else 4, 0)
 
     def emitPioupiou(self) :
-        self.pioupiou = PioupiouEnnemi((self.rect.centerx, self.rect.bottom))
-        return self.pioupiou
+        self._pioupiou = PioupiouEnnemi((self.rect.centerx, self.rect.bottom))
+        return self._pioupiou
 
 class BigBoss(Ennemi) :
     def __init__(self, position: tuple) -> None:
@@ -32,5 +32,5 @@ class BigBoss(Ennemi) :
         self.rect.move_ip(-8 if moveDirection == "left" else 8, 0)
 
     def emitPioupiou(self) :
-        self.pioupiou = PioupiouEnnemi((randint(self.rect.left, self.rect.right), self.rect.bottom))
-        return self.pioupiou
+        self._pioupiou = PioupiouEnnemi((randint(self.rect.left, self.rect.right), self.rect.bottom))
+        return self._pioupiou
