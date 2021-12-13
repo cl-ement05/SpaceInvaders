@@ -22,6 +22,7 @@ class Joueur(pygame.sprite.Sprite) :
         return self._vie > 0
 
     def diminuerVie(self, value: int) : self._vie -= value
+    def getVie(self) : return self._vie
 
     def update(self, pressed_keys):#les touches quand ça joue
         if pressed_keys[K_LEFT]:
