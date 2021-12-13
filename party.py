@@ -85,7 +85,7 @@ class Party :
 
         #Déclaration des events custom
         pygame.time.set_timer(self.ENNEMIPIOUPIOU, 4000 - 400 * self._level)
-        pygame.time.set_timer(self.ENNEMIDIRECTION, 1000)                       #permet de faire le va et vient des ennemis ; toutes les secondes : changement de direction
+        pygame.time.set_timer(self.ENNEMIDIRECTION, 1000 + 40 * self._level)                       #permet de faire le va et vient des ennemis ; toutes les secondes : changement de direction
 
         ennemiMoveDirection = 0                        #compteur utilisé pour faire bouger 5 fois les ennemis vers la droite de 4 pixels, puis la même chose vers la gauche et ainsi de suite
 
