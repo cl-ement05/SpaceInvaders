@@ -112,7 +112,7 @@ class Party :
 
             #GESTION DES INPUTS
             pressed_keys = pygame.key.get_pressed()
-            if self._joueur.update(pressed_keys) :                #cf documentation
+            if self._joueur.update(pressed_keys) :                #la fonction retourne True si la barre espace est appuyée -> on veut tirer un missile
                 if len(self._joueurPioupiou.sprites()) == 0 :                   #on vérifie que aucun missile n'est "en cours"    
                     newPioupiou = self._joueur.instantiatePioupiou()
                     self._allSprites.add(newPioupiou)

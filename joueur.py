@@ -25,18 +25,21 @@ class Joueur(pygame.sprite.Sprite) :
     def getVie(self) : return self._vie
 
     def update(self, pressed_keys):#les touches quand ça joue
+        spaceBar = False
         if pressed_keys[K_LEFT]:
             self.rect.move_ip(-8, 0)
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(8, 0)
         if pressed_keys[K_SPACE] :
-            return True
+            spaceBar = True
 
         #ne pas sortir de la map
         if self.rect.left < 0:
             self.rect.left = 0
         elif self.rect.right > SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
+
+        return spaceBar
 
     def instantiatePioupiou(self) :
         return PioupiouJoueur((self.rect.centerx, self.rect.top))
